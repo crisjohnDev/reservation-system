@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+                <div class="page-title">
+                    Dashboard
+                </div>
+
+                <div class="page-subtitle">
+                    Reservation System Administration
+                </div>
+            </div>
+
+            <div class="admin-badge">
+                Superuser
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+            <div class="welcome">
+
+                <h2>
+                    Welcome back, {{ request.user.username }}!
+                </h2>
+
+                <p>
+                    Here's what's happening with your reservations today.
+                </p>
+
+            </div>
+
+
+            <!-- =========================
+                 STATISTICS
+            ========================== -->
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-label">
+                            Total Reservations
+                        </div>
+
+                        <div class="stat-icon blue">
+                            ▣
+                        </div>
+
+                    </div>
+
+                    <div class="stat-value">
+                        {{ total_reservations|default:"0" }}
+                    </div>
+
+                    <div class="stat-description">
+                        All reservations
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-label">
+                            Pending Reservations
+                        </div>
+
+                        <div class="stat-icon orange">
+                            ◷
+                        </div>
+
+                    </div>
+
+                    <div class="stat-value">
+                        {{ pending_reservations|default:"0" }}
+                    </div>
+
+                    <div class="stat-description">
+                        Waiting for confirmation
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-label">
+                            Confirmed
+                        </div>
+
+                        <div class="stat-icon green">
+                            ✓
+                        </div>
+
+                    </div>
+
+                    <div class="stat-value">
+                        {{ confirmed_reservations|default:"0" }}
+                    </div>
+
+                    <div class="stat-description">
+                        Confirmed reservations
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div class="stat-label">
+                            Customers
+                        </div>
+
+                        <div class="stat-icon purple">
+                            ♙
+                        </div>
+
+                    </div>
+
+                    <div class="stat-value">
+                        {{ total_customers|default:"0" }}
+                    </div>
+
+                    <div class="stat-description">
+                        Registered customers
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 DASHBOARD GRID
+            ========================== -->
+
+            <div class="dashboard-grid">
+
+
+                <!-- RECENT RESERVATIONS -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div class="card-title">
+                            Recent Reservations
+                        </div>
+
+                        <a href="#" class="view-all">
+                            View all
+                        </a>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Reservation</th>
+                                    <th>Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for reservation in recent_reservations %}
+
+                                <tr>
+
+                                    <td>
+                                        <div class="reservation-name">
+                                            {{ reservation.customer }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="reservation-name">
+                                            {{ reservation.room }}
+                                        </div>
+
+                                        <div class="reservation-date">
+                                            {{ reservation.date }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+
+                                        {% if reservation.status == "CONFIRMED" %}
+
+                                            <span class="status confirmed">
+                                                Confirmed
+                                            </span>
+
+                                        {% elif reservation.status == "PENDING" %}
+
+                                            <span class="status pending">
+                                                Pending
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="status cancelled">
+                                                {{ reservation.status }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+
+                                    <td
+                                        colspan="3"
+                                        style="
+                                            text-align: center;
+                                            color: #94a3b8;
+                                            padding: 35px;
+                                        "
+                                    >
+                                        No reservations yet.
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div class="card-title">
+                            Quick Actions
+                        </div>
+
+                    </div>
+
+                    <div class="actions">
+
+                        <a href="#" class="action">
+
+                            <div class="action-icon">
+                                +
+                            </div>
+
+                            <div>
+
+                                <div class="action-title">
+                                    New Reservation
+                                </div>
+
+                                <div class="action-description">
+                                    Create a reservation
+                                </div>
+
+                            </div>
+
+                        </a>
+
+
+                        <a href="#" class="action">
+
+                            <div class="action-icon">
+                                ▣
+                            </div>
+
+                            <div>
+
+                                <div class="action-title">
+                                    Manage Rooms
+                                </div>
+
+                                <div class="action-description">
+                                    Add or edit rooms
+                                </div>
+
+                            </div>
+
+                        </a>
+
+
+                        <a href="#" class="action">
+
+                            <div class="action-icon">
+                                ₱
+                            </div>
+
+                            <div>
+
+                                <div class="action-title">
+                                    Payments
+                                </div>
+
+                                <div class="action-description">
+                                    Review payments
+                                </div>
+
+                            </div>
+
+                        </a>
+
+
+                        <a href="#" class="action">
+
+                            <div class="action-icon">
+                                ▥
+                            </div>
+
+                            <div>
+
+                                <div class="action-title">
+                                    Reports
+                                </div>
+
+                                <div class="action-description">
+                                    View reservation reports
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+{% endblock %}

@@ -1,0 +1,1189 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   RESERVATION DETAIL
+========================================================= */
+
+.reservation-detail-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.detail-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.detail-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.back-button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text);
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+    font-size: 20px;
+
+    transition: 0.2s;
+}
+
+.back-button:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.detail-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.detail-subtitle {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.detail-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.detail-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.detail-status.pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.detail-status.pending .detail-status-dot {
+    background: #f97316;
+}
+
+.detail-status.confirmed {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.detail-status.confirmed .detail-status-dot {
+    background: #16a34a;
+}
+
+.detail-status.cancelled {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.detail-status.cancelled .detail-status-dot {
+    background: #dc2626;
+}
+
+.detail-status.completed {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.detail-status.completed .detail-status-dot {
+    background: #2563eb;
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.detail-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.detail-card:last-child {
+    margin-bottom: 0;
+}
+
+.detail-card-header {
+    padding: 17px 20px;
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.detail-card-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   CUSTOMER
+========================================================= */
+
+.customer-detail {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.customer-detail-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+
+    background: #eff6ff;
+    color: var(--primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    flex-shrink: 0;
+}
+
+.customer-detail-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.customer-detail-email {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   ROOM
+========================================================= */
+
+.room-detail {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.room-image,
+.room-placeholder {
+    width: 90px;
+    height: 70px;
+
+    border-radius: 9px;
+
+    object-fit: cover;
+
+    border: 1px solid var(--border);
+
+    flex-shrink: 0;
+}
+
+.room-placeholder {
+    background: #f8fafc;
+    color: #94a3b8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+}
+
+.room-detail-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.room-detail-type {
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   BOOKING INFORMATION
+========================================================= */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+
+    background: var(--border);
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+.info-item {
+    background: var(--white);
+    padding: 15px;
+}
+
+.info-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.info-value {
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+
+/* =========================================================
+   SPECIAL REQUEST
+========================================================= */
+
+.special-request {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    padding: 14px;
+
+    font-size: 12px;
+    line-height: 1.7;
+    color: #475569;
+}
+
+
+/* =========================================================
+   PAYMENT SUMMARY
+========================================================= */
+
+.total-box {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.total-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 13px 14px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.total-row:last-child {
+    border-bottom: none;
+}
+
+.total-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.total-value {
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+    color: var(--text);
+}
+
+.total-final {
+    background: #f8fafc;
+    padding: 17px 14px;
+}
+
+.total-final .total-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.total-final .total-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detail-action {
+    width: 100%;
+    min-height: 42px;
+
+    border-radius: 8px;
+    border: 1px solid transparent;
+
+    padding: 10px 14px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.detail-action:hover {
+    transform: translateY(-1px);
+}
+
+.detail-confirm {
+    background: #16a34a;
+    color: white;
+}
+
+.detail-confirm:hover {
+    background: #15803d;
+}
+
+.detail-cancel {
+    background: #fff;
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+.detail-cancel:hover {
+    background: #fef2f2;
+}
+
+.detail-complete {
+    background: var(--primary);
+    color: white;
+}
+
+.detail-complete:hover {
+    background: var(--primary-dark);
+}
+
+
+/* =========================================================
+   STATUS MESSAGE
+========================================================= */
+
+.status-message {
+    padding: 13px 14px;
+    border-radius: 9px;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.status-message.confirmed {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.status-message.cancelled {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.status-message.completed {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+
+/* =========================================================
+   META
+========================================================= */
+
+.meta-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.meta-row:first-child {
+    padding-top: 0;
+}
+
+.meta-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.meta-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.meta-value {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .detail-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .detail-status {
+        margin-left: 54px;
+    }
+
+    .detail-title {
+        font-size: 19px;
+    }
+
+    .detail-card-body {
+        padding: 15px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .room-detail {
+        align-items: flex-start;
+    }
+
+    .room-image,
+    .room-placeholder {
+        width: 75px;
+        height: 60px;
+    }
+
+    .total-row {
+        gap: 10px;
+    }
+
+}
+
+</style>
+
+<div class="reservation-detail-page">
+
+
+<!-- =====================================================
+     PAGE HEADER
+====================================================== -->
+
+<div class="detail-page-header">
+
+    <div class="detail-header-left">
+
+        <a
+            href="{% url 'reservation_list' %}"
+            class="back-button"
+            title="Back to reservations"
+        >
+            ←
+        </a>
+
+        <div>
+
+            <div class="detail-title">
+                Reservation #{{ reservation.id }}
+            </div>
+
+            <div class="detail-subtitle">
+                Reservation details and booking information
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    {% if reservation.status == "PENDING" %}
+
+        <div class="detail-status pending">
+            <span class="detail-status-dot"></span>
+            Pending
+        </div>
+
+    {% elif reservation.status == "CONFIRMED" %}
+
+        <div class="detail-status confirmed">
+            <span class="detail-status-dot"></span>
+            Confirmed
+        </div>
+
+    {% elif reservation.status == "CANCELLED" %}
+
+        <div class="detail-status cancelled">
+            <span class="detail-status-dot"></span>
+            Cancelled
+        </div>
+
+    {% elif reservation.status == "COMPLETED" %}
+
+        <div class="detail-status completed">
+            <span class="detail-status-dot"></span>
+            Completed
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =====================================================
+     MAIN GRID
+====================================================== -->
+
+<div class="detail-grid">
+
+
+    <!-- =================================================
+         LEFT COLUMN
+    ================================================== -->
+
+    <div>
+
+
+        <!-- CUSTOMER -->
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Customer Information
+                </div>
+
+            </div>
+
+
+            <div class="detail-card-body">
+
+                <div class="customer-detail">
+
+                    <div class="customer-detail-avatar">
+
+                        {{ reservation.customer.username|first|upper }}
+
+                    </div>
+
+                    <div>
+
+                        <div class="customer-detail-name">
+                            {{ reservation.customer.username }}
+                        </div>
+
+                        <div class="customer-detail-email">
+                            {{ reservation.customer.email }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ROOM / COTTAGE -->
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Room / Cottage
+                </div>
+
+            </div>
+
+
+            <div class="detail-card-body">
+
+                <div class="room-detail">
+
+                    {% if reservation.room.image %}
+
+                        <img
+                            src="{{ reservation.room.image.url }}"
+                            alt="{{ reservation.room.name }}"
+                            class="room-image"
+                        >
+
+                    {% else %}
+
+                        <div class="room-placeholder">
+                            ▤
+                        </div>
+
+                    {% endif %}
+
+
+                    <div>
+
+                        <div class="room-detail-name">
+                            {{ reservation.room.name }}
+                        </div>
+
+                        <div class="room-detail-type">
+                            {{ reservation.room.type }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BOOKING DETAILS -->
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Booking Details
+                </div>
+
+            </div>
+
+
+            <div class="detail-card-body">
+
+                <div class="info-grid">
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Check-in
+                        </div>
+
+                        <div class="info-value">
+                            {{ reservation.check_in|date:"M d, Y" }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Check-out
+                        </div>
+
+                        <div class="info-value">
+                            {{ reservation.check_out|date:"M d, Y" }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Adults
+                        </div>
+
+                        <div class="info-value">
+                            {{ reservation.adults }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <div class="info-label">
+                            Children
+                        </div>
+
+                        <div class="info-value">
+                            {{ reservation.children }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SPECIAL REQUEST -->
+
+        {% if reservation.special_request %}
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Special Request
+                </div>
+
+            </div>
+
+            <div class="detail-card-body">
+
+                <div class="special-request">
+                    {{ reservation.special_request }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- =================================================
+         RIGHT COLUMN
+    ================================================== -->
+
+    <div>
+
+
+        <!-- PAYMENT SUMMARY -->
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Payment Summary
+                </div>
+
+            </div>
+
+
+            <div class="detail-card-body">
+
+                <div class="total-box">
+
+
+                    <div class="total-row">
+
+                        <span class="total-label">
+                            Room / Cottage
+                        </span>
+
+                        <span class="total-value">
+                            {{ reservation.room.name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span class="total-label">
+                            Check-in
+                        </span>
+
+                        <span class="total-value">
+                            {{ reservation.check_in|date:"M d, Y" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span class="total-label">
+                            Check-out
+                        </span>
+
+                        <span class="total-value">
+                            {{ reservation.check_out|date:"M d, Y" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span class="total-label">
+                            Guests
+                        </span>
+
+                        <span class="total-value">
+                            {{ reservation.adults }} adult{{ reservation.adults|pluralize }}
+
+                            {% if reservation.children %}
+                                + {{ reservation.children }} child{{ reservation.children|pluralize }}
+                            {% endif %}
+                        </span>
+
+                    </div>
+
+
+                    <div class="total-row total-final">
+
+                        <span class="total-label">
+                            Total Amount
+                        </span>
+
+                        <span class="total-value">
+                            ₱{{ reservation.total_amount }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        {% if reservation.status == "PENDING" %}
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Reservation Actions
+                </div>
+
+            </div>
+
+
+            <div class="detail-card-body">
+
+                <div class="detail-actions">
+
+
+                    <!-- CONFIRM -->
+
+                    <form
+                        method="POST"
+                        action="{% url 'confirm_reservation' reservation.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="detail-action detail-confirm"
+                            onclick="return confirm(
+                                'Are you sure you want to confirm this reservation?'
+                            );"
+                        >
+                            ✓ Confirm Reservation
+                        </button>
+
+                    </form>
+
+
+                    <!-- CANCEL -->
+
+                    <form
+                        method="POST"
+                        action="{% url 'cancel_reservation' reservation.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="detail-action detail-cancel"
+                            onclick="return confirm(
+                                'Are you sure you want to cancel this reservation?'
+                            );"
+                        >
+                            × Cancel Reservation
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% elif reservation.status == "CONFIRMED" %}
+
+        <!-- COMPLETE -->
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Reservation Actions
+                </div>
+
+            </div>
+
+            <div class="detail-card-body">
+
+                <div class="detail-actions">
+
+                    <form
+                        method="POST"
+                        action="{% url 'complete_reservation' reservation.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="detail-action detail-complete"
+                            onclick="return confirm(
+                                'Mark this reservation as completed?'
+                            );"
+                        >
+                            ✓ Complete Reservation
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% elif reservation.status == "CANCELLED" %}
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Reservation Status
+                </div>
+
+            </div>
+
+            <div class="detail-card-body">
+
+                <div class="status-message cancelled">
+
+                    This reservation has been cancelled.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% elif reservation.status == "COMPLETED" %}
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Reservation Status
+                </div>
+
+            </div>
+
+            <div class="detail-card-body">
+
+                <div class="status-message completed">
+
+                    This reservation has been completed successfully.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- RESERVATION INFORMATION -->
+
+        <div class="detail-card">
+
+            <div class="detail-card-header">
+
+                <div class="detail-card-title">
+                    Reservation Information
+                </div>
+
+            </div>
+
+
+            <div class="detail-card-body">
+
+                <div class="meta-list">
+
+
+                    <div class="meta-row">
+
+                        <span class="meta-label">
+                            Reservation ID
+                        </span>
+
+                        <span class="meta-value">
+                            #{{ reservation.id }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="meta-row">
+
+                        <span class="meta-label">
+                            Status
+                        </span>
+
+                        <span class="meta-value">
+                            {{ reservation.status }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="meta-row">
+
+                        <span class="meta-label">
+                            Created
+                        </span>
+
+                        <span class="meta-value">
+
+                            {{ reservation.created_at|date:"M d, Y h:i A" }}
+
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

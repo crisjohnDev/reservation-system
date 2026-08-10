@@ -1,0 +1,1892 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   AVAILABILITY PAGE
+========================================================= */
+
+.availability-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.availability-header {
+    margin-bottom: 25px;
+}
+
+.availability-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.availability-subtitle {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   SEARCH CARD
+========================================================= */
+
+.availability-search-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.availability-search-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.availability-search-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.availability-search-description {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.availability-search-body {
+    padding: 20px;
+}
+
+.availability-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 15px;
+    align-items: end;
+}
+
+.availability-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.availability-field label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.availability-field input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: #fff;
+    color: var(--text);
+
+    font-family: inherit;
+    font-size: 12px;
+
+    outline: none;
+    transition: 0.2s;
+}
+
+.availability-field input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px #eff6ff;
+}
+
+.availability-submit {
+    height: 42px;
+    padding: 0 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--primary);
+    color: #fff;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.availability-submit:hover {
+    background: var(--primary-dark);
+}
+
+.availability-date-info {
+    margin-top: 15px;
+    padding: 11px 13px;
+
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.availability-date-info strong {
+    color: var(--text);
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.availability-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.availability-summary-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.availability-summary-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.availability-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.availability-summary-icon {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.availability-summary-icon.blue {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.availability-summary-icon.green {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.availability-summary-icon.red {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.availability-summary-number {
+    margin-top: 13px;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.availability-summary-description {
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+.availability-calendar-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.availability-calendar-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.availability-calendar-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.availability-calendar-description {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.availability-calendar-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   CALENDAR LEGEND
+========================================================= */
+
+.calendar-legend {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.calendar-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.calendar-legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+}
+
+.calendar-legend-dot.pending {
+    background: #f59e0b;
+}
+
+.calendar-legend-dot.confirmed {
+    background: #16a34a;
+}
+
+
+/* =========================================================
+   FULLCALENDAR CUSTOMIZATION
+========================================================= */
+
+#reservationCalendar {
+    width: 100%;
+}
+
+.fc {
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.fc .fc-toolbar {
+    margin-bottom: 18px;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.fc .fc-button {
+    border: 1px solid var(--border);
+    background: #fff;
+    color: #475569;
+
+    box-shadow: none;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.fc .fc-button:hover {
+    background: #f8fafc;
+    color: var(--text);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.fc .fc-daygrid-day-number {
+    color: #475569;
+    font-size: 11px;
+    padding: 8px;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 8px;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    background: #f8fbff;
+}
+
+.fc .fc-event {
+    border-radius: 5px;
+    padding: 3px 5px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.fc .fc-daygrid-event {
+    white-space: normal;
+}
+
+.fc .fc-list-event-title {
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   AVAILABILITY SECTIONS
+========================================================= */
+
+.availability-section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.availability-section-header {
+    padding: 18px 20px;
+
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.availability-section-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.availability-section-description {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.availability-count {
+    font-size: 11px;
+    color: var(--muted);
+
+    background: #f8fafc;
+    border: 1px solid var(--border);
+
+    padding: 6px 10px;
+    border-radius: 20px;
+}
+
+
+/* =========================================================
+   ROOM GRID
+========================================================= */
+
+.availability-grid {
+    padding: 20px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(270px, 1fr));
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   ROOM CARD
+========================================================= */
+
+.availability-room-card {
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    overflow: hidden;
+
+    background: white;
+
+    transition: 0.2s;
+}
+
+.availability-room-card:hover {
+    border-color: #cbd5e1;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 20px
+        rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   ROOM IMAGE
+========================================================= */
+
+.availability-room-image {
+    width: 100%;
+    height: 155px;
+
+    object-fit: cover;
+    display: block;
+}
+
+.availability-room-placeholder {
+    width: 100%;
+    height: 155px;
+
+    background: #f8fafc;
+    color: #94a3b8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 35px;
+}
+
+
+/* =========================================================
+   ROOM BODY
+========================================================= */
+
+.availability-room-body {
+    padding: 16px;
+}
+
+.availability-room-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.availability-room-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.availability-room-type {
+    margin-top: 4px;
+
+    font-size: 10px;
+    color: var(--muted);
+
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.availability-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.availability-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.availability-status.available {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.availability-status.available
+.availability-status-dot {
+    background: #16a34a;
+}
+
+.availability-status.unavailable {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.availability-status.unavailable
+.availability-status-dot {
+    background: #dc2626;
+}
+
+
+/* =========================================================
+   ROOM INFO
+========================================================= */
+
+.availability-room-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    margin-top: 16px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+.availability-info-item {
+    padding: 10px;
+}
+
+.availability-info-item:nth-child(odd) {
+    border-right: 1px solid var(--border);
+}
+
+.availability-info-item:nth-child(-n+2) {
+    border-bottom: 1px solid var(--border);
+}
+
+.availability-info-label {
+    font-size: 9px;
+    color: var(--muted);
+}
+
+.availability-info-value {
+    margin-top: 4px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.availability-price {
+    margin-top: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.availability-price-label {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.availability-price-value {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.availability-view-button {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 14px;
+
+    padding: 9px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    background: white;
+    color: var(--text);
+
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.availability-view-button:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+
+/* =========================================================
+   UNAVAILABLE INFO
+========================================================= */
+
+.unavailable-info {
+    margin-top: 13px;
+
+    padding: 9px 10px;
+
+    background: #fef2f2;
+    border: 1px solid #fee2e2;
+    border-radius: 7px;
+
+    font-size: 10px;
+    color: #991b1b;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.availability-empty {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.availability-empty-icon {
+    width: 48px;
+    height: 48px;
+
+    margin: 0 auto 12px;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+    color: #94a3b8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+.availability-empty-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.availability-empty-text {
+    margin-top: 5px;
+
+    font-size: 11px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+.availability-initial {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    padding: 55px 20px;
+
+    text-align: center;
+
+    margin-bottom: 20px;
+}
+
+.availability-initial-icon {
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 14px;
+
+    background: #eff6ff;
+    color: var(--primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+}
+
+.availability-initial-title {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.availability-initial-text {
+    max-width: 450px;
+
+    margin: 6px auto 0;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .availability-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .availability-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .availability-submit {
+        grid-column: span 2;
+    }
+
+    .availability-calendar-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .availability-form {
+        grid-template-columns: 1fr;
+    }
+
+    .availability-submit {
+        grid-column: auto;
+    }
+
+    .availability-grid {
+        padding: 15px;
+        grid-template-columns: 1fr;
+    }
+
+    .availability-search-body {
+        padding: 15px;
+    }
+
+    .availability-calendar-body {
+        padding: 10px;
+    }
+
+    .availability-section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .fc .fc-toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}
+
+</style>
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="availability-page">
+
+<!-- =====================================================
+     PAGE HEADER
+====================================================== -->
+
+<div class="availability-header">
+
+    <div>
+
+        <div class="availability-title">
+            Availability
+        </div>
+
+        <div class="availability-subtitle">
+            Check which rooms and cottages are available
+            for selected dates.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SEARCH CARD
+====================================================== -->
+
+<div class="availability-search-card">
+
+    <div class="availability-search-header">
+
+        <div class="availability-search-title">
+            Check Availability
+        </div>
+
+        <div class="availability-search-description">
+            Select your check-in and check-out dates
+            to see available accommodations.
+        </div>
+
+    </div>
+
+
+    <div class="availability-search-body">
+
+        <form
+            method="GET"
+            action="{% url 'availability' %}"
+            class="availability-form"
+        >
+
+
+            <!-- CHECK-IN -->
+
+            <div class="availability-field">
+
+                <label for="check_in">
+                    Check-in Date
+                </label>
+
+                <input
+                    type="date"
+                    id="check_in"
+                    name="check_in"
+                    value="{{ check_in|default:'' }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- CHECK-OUT -->
+
+            <div class="availability-field">
+
+                <label for="check_out">
+                    Check-out Date
+                </label>
+
+                <input
+                    type="date"
+                    id="check_out"
+                    name="check_out"
+                    value="{{ check_out|default:'' }}"
+                    required
+                >
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="availability-submit"
+            >
+                Check Availability
+            </button>
+
+
+        </form>
+
+
+        {% if searched %}
+
+        <div class="availability-date-info">
+
+            Showing availability from
+
+            <strong>
+                {{ check_in }}
+            </strong>
+
+            to
+
+            <strong>
+                {{ check_out }}
+            </strong>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RESERVATION CALENDAR
+====================================================== -->
+
+<div class="availability-calendar-card">
+
+    <div class="availability-calendar-header">
+
+        <div>
+
+            <div class="availability-calendar-title">
+                Reservation Calendar
+            </div>
+
+            <div class="availability-calendar-description">
+                View pending and confirmed reservations
+                across all rooms and cottages.
+            </div>
+
+        </div>
+
+
+        <div class="calendar-legend">
+
+            <div class="calendar-legend-item">
+
+                <span class="calendar-legend-dot pending"></span>
+
+                Pending
+
+            </div>
+
+
+            <div class="calendar-legend-item">
+
+                <span class="calendar-legend-dot confirmed"></span>
+
+                Confirmed
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="availability-calendar-body">
+
+        <div id="reservationCalendar"></div>
+
+    </div>
+
+</div>
+
+
+{% if searched %}
+
+
+<!-- =====================================================
+     SUMMARY
+====================================================== -->
+
+<div class="availability-summary">
+
+
+    <!-- TOTAL -->
+
+    <div class="availability-summary-card">
+
+        <div class="availability-summary-top">
+
+            <div class="availability-summary-label">
+                Total Accommodations
+            </div>
+
+            <div class="availability-summary-icon blue">
+                ▤
+            </div>
+
+        </div>
+
+        <div class="availability-summary-number">
+
+            {{ rooms|length }}
+
+        </div>
+
+        <div class="availability-summary-description">
+            Rooms and cottages
+        </div>
+
+    </div>
+
+
+    <!-- AVAILABLE -->
+
+    <div class="availability-summary-card">
+
+        <div class="availability-summary-top">
+
+            <div class="availability-summary-label">
+                Available
+            </div>
+
+            <div class="availability-summary-icon green">
+                ✓
+            </div>
+
+        </div>
+
+        <div class="availability-summary-number">
+
+            {{ available_rooms|length }}
+
+        </div>
+
+        <div class="availability-summary-description">
+            Available for selected dates
+        </div>
+
+    </div>
+
+
+    <!-- UNAVAILABLE -->
+
+    <div class="availability-summary-card">
+
+        <div class="availability-summary-top">
+
+            <div class="availability-summary-label">
+                Unavailable
+            </div>
+
+            <div class="availability-summary-icon red">
+                ×
+            </div>
+
+        </div>
+
+        <div class="availability-summary-number">
+
+            {{ unavailable_rooms|length }}
+
+        </div>
+
+        <div class="availability-summary-description">
+            Already reserved
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     AVAILABLE ACCOMMODATIONS
+====================================================== -->
+
+<div class="availability-section">
+
+    <div class="availability-section-header">
+
+        <div>
+
+            <div class="availability-section-title">
+                Available Accommodations
+            </div>
+
+            <div class="availability-section-description">
+                Rooms and cottages available for the selected dates.
+            </div>
+
+        </div>
+
+        <div class="availability-count">
+
+            {{ available_rooms|length }}
+            available
+
+        </div>
+
+    </div>
+
+
+    {% if available_rooms %}
+
+    <div class="availability-grid">
+
+
+        {% for room in available_rooms %}
+
+        <div class="availability-room-card">
+
+
+            <!-- IMAGE -->
+
+            {% if room.image %}
+
+                <img
+                    src="{{ room.image.url }}"
+                    alt="{{ room.name }}"
+                    class="availability-room-image"
+                >
+
+            {% else %}
+
+                <div class="availability-room-placeholder">
+                    ▤
+                </div>
+
+            {% endif %}
+
+
+            <!-- BODY -->
+
+            <div class="availability-room-body">
+
+
+                <div class="availability-room-top">
+
+                    <div>
+
+                        <div class="availability-room-name">
+                            {{ room.name }}
+                        </div>
+
+                        <div class="availability-room-type">
+                            {{ room.type }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="availability-status available">
+
+                        <span class="availability-status-dot"></span>
+
+                        Available
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFO -->
+
+                <div class="availability-room-info">
+
+
+                    <div class="availability-info-item">
+
+                        <div class="availability-info-label">
+                            Capacity
+                        </div>
+
+                        <div class="availability-info-value">
+                            {{ room.capacity }} guests
+                        </div>
+
+                    </div>
+
+
+                    <div class="availability-info-item">
+
+                        <div class="availability-info-label">
+                            Status
+                        </div>
+
+                        <div class="availability-info-value">
+                            {{ room.status }}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="availability-price">
+
+                    <div class="availability-price-label">
+                        Price per night
+                    </div>
+
+                    <div class="availability-price-value">
+                        ₱{{ room.price }}
+                    </div>
+
+                </div>
+
+
+                {% if room.id %}
+
+                <a
+                    href="{% url 'edit_room' room.id %}"
+                    class="availability-view-button"
+                >
+                    View Accommodation
+                </a>
+
+                {% endif %}
+
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+
+    </div>
+
+    {% else %}
+
+    <div class="availability-empty">
+
+        <div class="availability-empty-icon">
+            ×
+        </div>
+
+        <div class="availability-empty-title">
+            No accommodations available
+        </div>
+
+        <div class="availability-empty-text">
+            All rooms and cottages are already reserved
+            for the selected dates.
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =====================================================
+     UNAVAILABLE ACCOMMODATIONS
+====================================================== -->
+
+<div class="availability-section">
+
+    <div class="availability-section-header">
+
+        <div>
+
+            <div class="availability-section-title">
+                Unavailable Accommodations
+            </div>
+
+            <div class="availability-section-description">
+                Rooms and cottages that have an overlapping reservation.
+            </div>
+
+        </div>
+
+        <div class="availability-count">
+
+            {{ unavailable_rooms|length }}
+            unavailable
+
+        </div>
+
+    </div>
+
+
+    {% if unavailable_rooms %}
+
+    <div class="availability-grid">
+
+
+        {% for room in unavailable_rooms %}
+
+        <div class="availability-room-card">
+
+
+            <!-- IMAGE -->
+
+            {% if room.image %}
+
+                <img
+                    src="{{ room.image.url }}"
+                    alt="{{ room.name }}"
+                    class="availability-room-image"
+                >
+
+            {% else %}
+
+                <div class="availability-room-placeholder">
+                    ▤
+                </div>
+
+            {% endif %}
+
+
+            <!-- BODY -->
+
+            <div class="availability-room-body">
+
+
+                <div class="availability-room-top">
+
+                    <div>
+
+                        <div class="availability-room-name">
+                            {{ room.name }}
+                        </div>
+
+                        <div class="availability-room-type">
+                            {{ room.type }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="availability-status unavailable">
+
+                        <span class="availability-status-dot"></span>
+
+                        Reserved
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFO -->
+
+                <div class="availability-room-info">
+
+
+                    <div class="availability-info-item">
+
+                        <div class="availability-info-label">
+                            Capacity
+                        </div>
+
+                        <div class="availability-info-value">
+                            {{ room.capacity }} guests
+                        </div>
+
+                    </div>
+
+
+                    <div class="availability-info-item">
+
+                        <div class="availability-info-label">
+                            Status
+                        </div>
+
+                        <div class="availability-info-value">
+                            {{ room.status }}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="availability-price">
+
+                    <div class="availability-price-label">
+                        Price per night
+                    </div>
+
+                    <div class="availability-price-value">
+                        ₱{{ room.price }}
+                    </div>
+
+                </div>
+
+
+                <div class="unavailable-info">
+
+                    This accommodation has an existing
+                    pending or confirmed reservation
+                    overlapping the selected dates.
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+
+    </div>
+
+    {% else %}
+
+    <div class="availability-empty">
+
+        <div class="availability-empty-icon">
+            ✓
+        </div>
+
+        <div class="availability-empty-title">
+            No unavailable accommodations
+        </div>
+
+        <div class="availability-empty-text">
+            All accommodations are available for
+            the selected dates.
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+{% else %}
+
+
+<!-- =====================================================
+     INITIAL STATE
+====================================================== -->
+
+<div class="availability-initial">
+
+    <div class="availability-initial-icon">
+        ◷
+    </div>
+
+    <div class="availability-initial-title">
+        Check accommodation availability
+    </div>
+
+    <div class="availability-initial-text">
+        Select a check-in and check-out date above.
+        The system will compare your selected dates
+        with existing pending and confirmed reservations.
+    </div>
+
+</div>
+
+
+{% endif %}
+
+</div>
+
+<!-- =========================================================
+     FULLCALENDAR
+========================================================= -->
+
+<link
+    href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.css"
+    rel="stylesheet"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.18/index.global.min.js"></script>
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           DATE INPUTS
+        ===================================================== */
+
+        const checkIn =
+            document.getElementById("check_in");
+
+        const checkOut =
+            document.getElementById("check_out");
+
+
+        if (checkIn && checkOut) {
+
+            const today =
+                new Date();
+
+            const year =
+                today.getFullYear();
+
+            const month =
+                String(
+                    today.getMonth() + 1
+                ).padStart(2, "0");
+
+            const day =
+                String(
+                    today.getDate()
+                ).padStart(2, "0");
+
+            const todayString =
+                `${year}-${month}-${day}`;
+
+
+            checkIn.min =
+                todayString;
+
+
+            checkIn.addEventListener(
+                "change",
+                function () {
+
+                    if (!checkIn.value) {
+                        return;
+                    }
+
+
+                    const selectedDate =
+                        new Date(
+                            checkIn.value +
+                            "T00:00:00"
+                        );
+
+
+                    selectedDate.setDate(
+                        selectedDate.getDate() + 1
+                    );
+
+
+                    const nextYear =
+                        selectedDate.getFullYear();
+
+                    const nextMonth =
+                        String(
+                            selectedDate.getMonth() + 1
+                        ).padStart(2, "0");
+
+                    const nextDay =
+                        String(
+                            selectedDate.getDate()
+                        ).padStart(2, "0");
+
+
+                    checkOut.min =
+                        `${nextYear}-${nextMonth}-${nextDay}`;
+
+
+                    if (
+                        checkOut.value &&
+                        checkOut.value <=
+                        checkIn.value
+                    ) {
+
+                        checkOut.value = "";
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           RESERVATION CALENDAR
+        ===================================================== */
+
+        const calendarElement =
+            document.getElementById(
+                "reservationCalendar"
+            );
+
+
+        if (!calendarElement) {
+            return;
+        }
+
+
+        let reservations = [];
+
+        try {
+
+            reservations =
+                {{ calendar_reservations|default:"[]"|safe }};
+
+        } catch (error) {
+
+            console.error(
+                "Unable to load calendar reservations:",
+                error
+            );
+
+            reservations = [];
+
+        }
+
+
+        const events =
+            reservations.map(
+                function (reservation) {
+
+
+                    let backgroundColor =
+                        "#2563eb";
+
+                    let borderColor =
+                        "#2563eb";
+
+
+                    /* -----------------------------------------
+                       PENDING
+                    ----------------------------------------- */
+
+                    if (
+                        reservation.status ===
+                        "PENDING"
+                    ) {
+
+                        backgroundColor =
+                            "#f59e0b";
+
+                        borderColor =
+                            "#d97706";
+
+                    }
+
+
+                    /* -----------------------------------------
+                       CONFIRMED
+                    ----------------------------------------- */
+
+                    else if (
+                        reservation.status ===
+                        "CONFIRMED"
+                    ) {
+
+                        backgroundColor =
+                            "#16a34a";
+
+                        borderColor =
+                            "#15803d";
+
+                    }
+
+
+                    return {
+
+                        id:
+                            String(
+                                reservation.id
+                            ),
+
+                        title:
+                            reservation.title,
+
+                        start:
+                            reservation.check_in,
+
+                        /*
+                         * FullCalendar treats end dates
+                         * as exclusive.
+                         *
+                         * Since check-out is already
+                         * the first unavailable night,
+                         * this is exactly what we want.
+                         */
+
+                        end:
+                            reservation.check_out,
+
+                        backgroundColor:
+                            backgroundColor,
+
+                        borderColor:
+                            borderColor,
+
+                        textColor:
+                            "#ffffff",
+
+                        extendedProps: {
+
+                            room:
+                                reservation.room,
+
+                            customer:
+                                reservation.customer,
+
+                            status:
+                                reservation.status
+
+                        }
+
+                    };
+
+                }
+            );
+
+
+        /* =====================================================
+           CREATE CALENDAR
+        ===================================================== */
+
+        const calendar =
+            new FullCalendar.Calendar(
+                calendarElement,
+                {
+
+                    initialView:
+                        "dayGridMonth",
+
+                    height:
+                        "auto",
+
+                    nowIndicator:
+                        true,
+
+                    editable:
+                        false,
+
+                    selectable:
+                        false,
+
+
+                    /* -----------------------------------------
+                       HEADER
+                    ----------------------------------------- */
+
+                    headerToolbar: {
+
+                        left:
+                            "prev,next today",
+
+                        center:
+                            "title",
+
+                        right:
+                            "dayGridMonth,timeGridWeek,listMonth"
+
+                    },
+
+
+                    /* -----------------------------------------
+                       EVENTS
+                    ----------------------------------------- */
+
+                    events:
+                        events,
+
+
+                    /* -----------------------------------------
+                       EVENT CLICK
+                    ----------------------------------------- */
+
+                    eventClick:
+                        function (info) {
+
+
+                            const reservation =
+                                info.event;
+
+
+                            const reservationId =
+                                reservation.id;
+
+
+                            window.location.href =
+                                "{% url 'reservation_detail' 0 %}"
+                                .replace(
+                                    "/0/",
+                                    "/" +
+                                    reservationId +
+                                    "/"
+                                );
+
+
+                        },
+
+
+                    /* -----------------------------------------
+                       EVENT TOOLTIP
+                    ----------------------------------------- */
+
+                    eventMouseEnter:
+                        function (info) {
+
+
+                            const props =
+                                info.event.extendedProps;
+
+
+                            info.el.title =
+                                "Customer: " +
+                                props.customer +
+                                "\n" +
+                                "Accommodation: " +
+                                props.room +
+                                "\n" +
+                                "Status: " +
+                                props.status;
+
+
+                        }
+
+                }
+            );
+
+
+        calendar.render();
+
+    }
+);
+
+</script>
+
+{% endblock %}
