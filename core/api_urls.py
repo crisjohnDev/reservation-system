@@ -8,6 +8,8 @@ from .api_views import (
     create_reservation,
     my_reservations,
     upload_payment_receipt,
+    reservation_detail
+    
 )
 
 
@@ -63,6 +65,13 @@ urlpatterns = [
         "reservations/create/",
         create_reservation,
         name="create_reservation"
+    ),
+
+    # GET - single reservation
+    path(
+        "reservations/<int:reservation_id>/",
+        reservation_detail,
+        name="reservation_detail"
     ),
 
     # POST - upload payment receipt

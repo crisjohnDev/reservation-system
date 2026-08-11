@@ -12,7 +12,18 @@ from .views import (
     reservation_list,
     confirm_reservation,
     cancel_reservation,
-    reservation_detail
+    reservation_detail,
+    approve_payment,
+    reject_payment,
+    payment_list,
+    payment_detail,
+    approve_payment,
+    reject_payment,
+    customer_list,
+    customer_detail,
+    reports,
+    mapping,
+    save_room_map_position
 )
 
 urlpatterns = [
@@ -30,4 +41,14 @@ urlpatterns = [
     path("reservations/<int:reservation_id>/", reservation_detail, name="reservation_detail"),
     path("reservations/<int:reservation_id>/complete/", complete_reservation, name="complete_reservation"),
     path("availability/", availability, name="availability"),
+    path("reservations/<int:reservation_id>/payment/approve/", approve_payment, name="approve_payment"),
+    path("reservations/<int:reservation_id>/payment/reject/", reject_payment, name="reject_payment"),
+    path("payments/", payment_list, name="payment_list"),
+    path("payments/<int:reservation_id>/", payment_detail, name="payment_detail"),
+    path("customers/", customer_list, name="customer_list"),
+    path("customers/<int:customer_id>/", customer_detail, name="customer_detail"),
+    path("reports/", reports, name="reports"),
+    path("mapping/", mapping, name="mapping"),
+    path("mapping/room/<int:room_id>/position/", save_room_map_position, name="save_room_map_position"),
+    
 ]

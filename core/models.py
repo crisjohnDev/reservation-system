@@ -133,3 +133,53 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"Reservation #{self.id}"
+
+class RoomMapPosition(models.Model):
+
+    room = models.OneToOneField(
+        Room,
+        on_delete=models.CASCADE,
+        related_name="map_position"
+    )
+
+    # Position as percentage of the map
+    x = models.DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        default=0
+    )
+
+    y = models.DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        default=0
+    )
+
+    # Size as percentage of the map
+    width = models.DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        default=8
+    )
+
+    height = models.DecimalField(
+        max_digits=6,
+        decimal_places=3,
+        default=6
+    )
+
+    # Whether the room should appear on the map
+    is_visible = models.BooleanField(
+        default=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return f"{self.room.name} Map Position"

@@ -1,0 +1,991 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   PAYMENT DETAIL
+========================================================= */
+
+.payment-detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.payment-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.payment-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.payment-back {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--white);
+    color: var(--text);
+
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.payment-back:hover {
+    background: #f8fafc;
+}
+
+.payment-detail-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.payment-detail-subtitle {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.payment-detail-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.payment-detail-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+
+/* PENDING */
+
+.payment-detail-status.pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.payment-detail-status.pending .payment-detail-status-dot {
+    background: #f97316;
+}
+
+
+/* PAID */
+
+.payment-detail-status.paid {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.payment-detail-status.paid .payment-detail-status-dot {
+    background: #16a34a;
+}
+
+
+/* REJECTED */
+
+.payment-detail-status.rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.payment-detail-status.rejected .payment-detail-status-dot {
+    background: #dc2626;
+}
+
+
+/* UNPAID */
+
+.payment-detail-status.unpaid {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.payment-detail-status.unpaid .payment-detail-status-dot {
+    background: #94a3b8;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.payment-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.payment-detail-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.payment-detail-card:last-child {
+    margin-bottom: 0;
+}
+
+.payment-detail-card-header {
+    padding: 17px 20px;
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.payment-detail-card-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   RECEIPT
+========================================================= */
+
+.receipt-container {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    padding: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 400px;
+}
+
+.receipt-image {
+    display: block;
+
+    max-width: 100%;
+    max-height: 650px;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.08);
+}
+
+.receipt-empty {
+    text-align: center;
+    color: #94a3b8;
+}
+
+.receipt-empty-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.receipt-empty-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.receipt-empty-text {
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   CUSTOMER
+========================================================= */
+
+.customer-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.customer-avatar {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+    color: var(--primary);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.customer-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.customer-email {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 20px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.info-row:first-child {
+    padding-top: 0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.info-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.info-value {
+    font-size: 11px;
+    font-weight: 700;
+
+    color: var(--text);
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+.payment-total {
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    padding: 18px;
+}
+
+.payment-total-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.payment-total-value {
+    margin-top: 5px;
+
+    font-size: 26px;
+    font-weight: 800;
+
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.payment-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payment-action {
+    width: 100%;
+
+    min-height: 44px;
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 10px 14px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.payment-approve {
+    background: #16a34a;
+    color: white;
+}
+
+.payment-approve:hover {
+    background: #15803d;
+}
+
+.payment-reject {
+    background: white;
+    color: #dc2626;
+
+    border: 1px solid #fecaca;
+}
+
+.payment-reject:hover {
+    background: #fef2f2;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.payment-message {
+    padding: 13px 14px;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.payment-message.paid {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.payment-message.rejected {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.payment-message.unpaid {
+    background: #f8fafc;
+    color: #475569;
+    border: 1px solid var(--border);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .payment-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .payment-detail-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .payment-detail-status {
+        margin-left: 54px;
+    }
+
+    .payment-detail-title {
+        font-size: 19px;
+    }
+
+    .payment-detail-card-body {
+        padding: 15px;
+    }
+
+}
+
+</style>
+
+<div class="payment-detail-page">
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<div class="payment-detail-header">
+
+    <div class="payment-header-left">
+
+        <a
+            href="{% url 'payment_list' %}"
+            class="payment-back"
+            title="Back to payments"
+        >
+            ←
+        </a>
+
+        <div>
+
+            <div class="payment-detail-title">
+                Payment #{{ reservation.id }}
+            </div>
+
+            <div class="payment-detail-subtitle">
+                Review customer payment and receipt
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    {% if reservation.payment_status == "PENDING" %}
+
+        <div class="payment-detail-status pending">
+
+            <span class="payment-detail-status-dot"></span>
+
+            Payment Verification
+
+        </div>
+
+    {% elif reservation.payment_status == "PAID" %}
+
+        <div class="payment-detail-status paid">
+
+            <span class="payment-detail-status-dot"></span>
+
+            Paid
+
+        </div>
+
+    {% elif reservation.payment_status == "REJECTED" %}
+
+        <div class="payment-detail-status rejected">
+
+            <span class="payment-detail-status-dot"></span>
+
+            Rejected
+
+        </div>
+
+    {% else %}
+
+        <div class="payment-detail-status unpaid">
+
+            <span class="payment-detail-status-dot"></span>
+
+            Unpaid
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN GRID
+====================================================== -->
+
+<div class="payment-detail-grid">
+
+
+    <!-- =================================================
+         LEFT
+    ================================================== -->
+
+    <div>
+
+
+        <!-- RECEIPT -->
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Payment Receipt
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                <div class="receipt-container">
+
+                    {% if reservation.payment_receipt %}
+
+                        <a
+                            href="{{ reservation.payment_receipt.url }}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+
+                            <img
+                                src="{{ reservation.payment_receipt.url }}"
+                                alt="Payment Receipt"
+                                class="receipt-image"
+                            >
+
+                        </a>
+
+                    {% else %}
+
+                        <div class="receipt-empty">
+
+                            <div class="receipt-empty-icon">
+                                ₱
+                            </div>
+
+                            <div class="receipt-empty-title">
+                                No Payment Receipt
+                            </div>
+
+                            <div class="receipt-empty-text">
+                                The customer has not uploaded a payment receipt.
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CUSTOMER -->
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Customer Information
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                <div class="customer-info">
+
+                    <div class="customer-avatar">
+
+                        {{ reservation.customer.username|first|upper }}
+
+                    </div>
+
+                    <div>
+
+                        <div class="customer-name">
+                            {{ reservation.customer.username }}
+                        </div>
+
+                        <div class="customer-email">
+                            {{ reservation.customer.email }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         RIGHT
+    ================================================== -->
+
+    <div>
+
+
+        <!-- RESERVATION -->
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Reservation Information
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                <div class="info-list">
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Reservation
+                        </span>
+
+                        <span class="info-value">
+                            #{{ reservation.id }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Room / Cottage
+                        </span>
+
+                        <span class="info-value">
+                            {{ reservation.room.name }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Check-in
+                        </span>
+
+                        <span class="info-value">
+                            {{ reservation.check_in|date:"M d, Y" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Check-out
+                        </span>
+
+                        <span class="info-value">
+                            {{ reservation.check_out|date:"M d, Y" }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Guests
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ reservation.adults }}
+                            adult{{ reservation.adults|pluralize }}
+
+                            {% if reservation.children %}
+
+                                + {{ reservation.children }}
+                                child{{ reservation.children|pluralize }}
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TOTAL -->
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Payment Amount
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                <div class="payment-total">
+
+                    <div class="payment-total-label">
+                        Total Reservation Amount
+                    </div>
+
+                    <div class="payment-total-value">
+                        ₱{{ reservation.total_amount }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PAYMENT INFORMATION -->
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Payment Information
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                <div class="info-list">
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Payment Status
+                        </span>
+
+                        <span class="info-value">
+                            {{ reservation.get_payment_status_display }}
+                        </span>
+
+                    </div>
+
+
+                    {% if reservation.payment_uploaded_at %}
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Uploaded
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ reservation.payment_uploaded_at|date:"M d, Y h:i A" }}
+
+                        </span>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Reservation Status
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ reservation.get_status_display }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        {% if reservation.payment_status == "PENDING" %}
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Payment Verification
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                {% if reservation.payment_receipt %}
+
+                <div class="payment-actions">
+
+
+                    <!-- APPROVE -->
+
+                    <form
+                        method="POST"
+                        action="{% url 'approve_payment' reservation.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="payment-action payment-approve"
+                            onclick="return confirm(
+                                'Are you sure you want to approve this payment?'
+                            );"
+                        >
+                            ✓ Approve Payment
+                        </button>
+
+                    </form>
+
+
+                    <!-- REJECT -->
+
+                    <form
+                        method="POST"
+                        action="{% url 'reject_payment' reservation.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="payment-action payment-reject"
+                            onclick="return confirm(
+                                'Are you sure you want to reject this payment?'
+                            );"
+                        >
+                            × Reject Payment
+                        </button>
+
+                    </form>
+
+                </div>
+
+                {% else %}
+
+                <div class="payment-message unpaid">
+
+                    The customer has not uploaded a payment receipt yet.
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        {% elif reservation.payment_status == "PAID" %}
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Payment Status
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                <div class="payment-message paid">
+
+                    ✓ This payment has been verified successfully.
+
+                    The reservation is currently
+                    <strong>
+                        {{ reservation.get_status_display }}
+                    </strong>.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% elif reservation.payment_status == "REJECTED" %}
+
+        <div class="payment-detail-card">
+
+            <div class="payment-detail-card-header">
+                Payment Status
+            </div>
+
+            <div class="payment-detail-card-body">
+
+                <div class="payment-message rejected">
+
+                    This payment has been rejected.
+
+                    The customer may need to upload
+                    a valid payment receipt.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

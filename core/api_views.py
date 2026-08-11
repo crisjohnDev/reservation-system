@@ -749,3 +749,156 @@ def upload_payment_receipt(request, reservation_id):
         },
         status=200
     )
+
+
+@api_view(["GET"])
+def reservation_detail(request, reservation_id):
+
+    # ==========================================
+    # CHECK LOGIN
+    # ==========================================
+
+    if not request.user.is_authenticated:
+
+        return Response(
+            {
+                "success": False,
+                "message": "You must be logged in."
+            },
+            status=401
+        )
+
+
+    # ==========================================
+    # GET RESERVATION
+    # ==========================================
+
+    try:
+
+        reservation = (
+            Reservation.objects
+            .select_related("room")
+            .get(
+                id=reservation_id,
+                customer=request.user
+            )
+        )
+
+    except Reservation.DoesNotExist:
+
+        return Response(
+            {
+                "success": False,
+                "message": "Reservation not found."
+            },
+            status=404
+        )
+
+
+    # ==========================================
+    # ROOM IMAGE
+    # ==========================================
+
+    room_image = None
+
+    if reservation.room.image:
+
+        room_image = request.build_absolute_uri(
+            reservation.room.image.url
+        )
+
+
+    # ==========================================
+    # CALCULATE NIGHTS
+    # ==========================================
+
+    nights = (
+        reservation.check_out -
+        reservation.check_in
+    ).days
+
+
+    # ==========================================
+    # RESPONSE
+    # ==========================================
+
+    return Response(
+        {
+            "success": True,
+
+            "reservation": {
+
+                "id":
+                    reservation.id,
+
+                "room": {
+
+                    "id":
+                        reservation.room.id,
+
+                    "name":
+                        reservation.room.name,
+
+                    "type":
+                        reservation.room.type,
+
+                    "image":
+                        room_image,
+
+                    "price":
+                        str(
+                            reservation.room.price
+                        ),
+
+                    "capacity":
+                        reservation.room.capacity,
+
+                },
+
+                "check_in":
+                    reservation.check_in,
+
+                "check_out":
+                    reservation.check_out,
+
+                "adults":
+                    reservation.adults,
+
+                "children":
+                    reservation.children,
+
+                "special_request":
+                    reservation.special_request,
+
+                "nights":
+                    nights,
+
+                "total_amount":
+                    str(
+                        reservation.total_amount
+                    ),
+
+                "status":
+                    reservation.status,
+
+                "payment_status":
+                    reservation.payment_status,
+
+                "payment_receipt":
+                    (
+                        request.build_absolute_uri(
+                            reservation.payment_receipt.url
+                        )
+                        if reservation.payment_receipt
+                        else None
+                    ),
+
+                "payment_uploaded_at":
+                    reservation.payment_uploaded_at,
+
+                "created_at":
+                    reservation.created_at,
+            }
+        },
+        status=200
+    )

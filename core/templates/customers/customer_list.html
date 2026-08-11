@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+.customer-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* HEADER */
+
+.customer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.customer-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.customer-subtitle {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+
+/* SUMMARY */
+
+.customer-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.customer-summary-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.customer-summary-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.customer-summary-value {
+    margin-top: 6px;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+
+/* TABLE */
+
+.customer-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.customer-table-wrapper {
+    overflow-x: auto;
+}
+
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.customer-table th {
+    padding: 14px 16px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border);
+
+    text-align: left;
+
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.customer-table td {
+    padding: 15px 16px;
+    border-bottom: 1px solid #f1f5f9;
+
+    font-size: 12px;
+    color: var(--text);
+
+    vertical-align: middle;
+}
+
+.customer-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* CUSTOMER */
+
+.customer-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.customer-avatar {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+    color: var(--primary);
+
+    font-size: 14px;
+    font-weight: 800;
+
+    flex-shrink: 0;
+}
+
+.customer-name {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.customer-username {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* EMAIL */
+
+.customer-email {
+    color: #475569;
+}
+
+
+/* DATE */
+
+.customer-date {
+    color: #64748b;
+    font-size: 11px;
+}
+
+
+/* STATUS */
+
+.customer-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.customer-status.active {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.customer-status.inactive {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.customer-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+/* ACTION */
+
+.customer-action {
+    display: inline-flex;
+
+    padding: 7px 11px;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    color: var(--text);
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.customer-action:hover {
+    background: #f8fafc;
+}
+
+
+/* EMPTY */
+
+.customer-empty {
+    padding: 60px 20px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .customer-summary {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .customer-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+}
+
+</style>
+
+<div class="customer-page">
+
+<!-- HEADER -->
+
+<div class="customer-header">
+
+    <div>
+
+        <div class="customer-title">
+            Customers
+        </div>
+
+        <div class="customer-subtitle">
+            View and manage registered customers.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SUMMARY -->
+
+<div class="customer-summary">
+
+
+    <div class="customer-summary-card">
+
+        <div class="customer-summary-label">
+            Total Customers
+        </div>
+
+        <div class="customer-summary-value">
+            {{ customers|length }}
+        </div>
+
+    </div>
+
+
+    <div class="customer-summary-card">
+
+        <div class="customer-summary-label">
+            Active Customers
+        </div>
+
+        <div class="customer-summary-value">
+            {{ active_customers }}
+        </div>
+
+    </div>
+
+
+    <div class="customer-summary-card">
+
+        <div class="customer-summary-label">
+            Inactive Customers
+        </div>
+
+        <div class="customer-summary-value">
+            {{ inactive_customers }}
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- CUSTOMER TABLE -->
+
+<div class="customer-card">
+
+    <div class="customer-table-wrapper">
+
+        <table class="customer-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Customer
+                    </th>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <th>
+                        Joined
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for customer in customers %}
+
+                <tr>
+
+
+                    <!-- CUSTOMER -->
+
+                    <td>
+
+                        <div class="customer-profile">
+
+                            <div class="customer-avatar">
+
+                                {{ customer.username|first|upper }}
+
+                            </div>
+
+
+                            <div>
+
+                                <div class="customer-name">
+
+                                    {{ customer.get_full_name|default:customer.username }}
+
+                                </div>
+
+                                <div class="customer-username">
+
+                                    @{{ customer.username }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- EMAIL -->
+
+                    <td>
+
+                        <div class="customer-email">
+
+                            {{ customer.email|default:"No email" }}
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- JOINED -->
+
+                    <td>
+
+                        <div class="customer-date">
+
+                            {{ customer.date_joined|date:"M d, Y" }}
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        {% if customer.is_active %}
+
+                            <span class="customer-status active">
+
+                                <span class="customer-status-dot"></span>
+
+                                Active
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="customer-status inactive">
+
+                                <span class="customer-status-dot"></span>
+
+                                Inactive
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+
+                    <td>
+
+                        <a
+                            href="{% url 'customer_detail' customer.id %}"
+                            class="customer-action"
+                        >
+                            View
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="customer-empty"
+                    >
+
+                        No customers registered yet.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

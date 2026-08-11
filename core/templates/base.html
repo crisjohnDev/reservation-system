@@ -630,7 +630,7 @@
                 <span>Availability</span>
             </a>
 
-            <a href="#">
+            <a href="{% url 'payment_list' %}">
                 <div class="nav-icon">₱</div>
                 <span>Payments</span>
             </a>
@@ -639,12 +639,17 @@
                 Management
             </div>
 
-            <a href="#">
+            <a href="{% url 'customer_list' %}">
                 <div class="nav-icon">♙</div>
                 <span>Customers</span>
             </a>
 
-            <a href="#">
+            <a href="{% url 'mapping' %}">
+                <div class="nav-icon">⌖</div>
+                <span>Mapping</span>
+            </a>
+
+            <a href="{% url 'reports' %}">
                 <div class="nav-icon">▥</div>
                 <span>Reports</span>
             </a>

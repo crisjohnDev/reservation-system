@@ -1,0 +1,1917 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   MAPPING PAGE
+========================================================= */
+
+.mapping-page {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+.mapping-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.mapping-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.mapping-subtitle {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.mapping-save-status {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.mapping-save-status.saved {
+    color: #15803d;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.mapping-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+.map-wrapper {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    overflow: auto;
+}
+
+.resort-map {
+    min-width: 900px;
+    position: relative;
+}
+
+
+/* =========================================================
+   BEACH
+========================================================= */
+
+.beach-bar {
+    background: linear-gradient(
+        180deg,
+        #38bdf8 0%,
+        #0284c7 100%
+    );
+
+    color: white;
+    text-align: center;
+
+    padding: 15px;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    border-radius: 8px 8px 0 0;
+
+    letter-spacing: 2px;
+
+    box-shadow:
+        0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+
+/* =========================================================
+   MAP CONTAINER
+========================================================= */
+
+.map-container {
+    background-color: #f1f5f9;
+
+    border: 2px solid #94a3b8;
+    border-top: none;
+
+    border-radius: 0 0 8px 8px;
+
+    padding: 20px;
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 2fr;
+
+    gap: 15px;
+
+    position: relative;
+
+    min-height: 650px;
+}
+
+
+/* =========================================================
+   FIXED MAP OBJECTS
+========================================================= */
+
+.map-card {
+    background: #ffffff;
+
+    border: 2px solid #94a3b8;
+
+    border-radius: 6px;
+
+    padding: 10px;
+
+    text-align: center;
+
+    box-shadow:
+        0 2px 4px rgba(0,0,0,0.05);
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 60px;
+}
+
+.map-card-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.map-card-subtitle {
+    font-size: 11px;
+    color: #64748b;
+}
+
+
+/* =========================================================
+   ROADWAYS
+========================================================= */
+
+.road-v {
+    background-color: #cbd5e1;
+
+    border: 2px dashed #94a3b8;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    writing-mode: vertical-rl;
+
+    text-transform: uppercase;
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    color: #475569;
+
+    min-height: 250px;
+
+    border-radius: 4px;
+}
+
+.road-h {
+    grid-column: span 3;
+
+    background-color: #cbd5e1;
+
+    border: 2px dashed #94a3b8;
+
+    padding: 8px;
+
+    text-align: center;
+
+    text-transform: uppercase;
+
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    color: #475569;
+
+    border-radius: 4px;
+
+    margin: 10px 0;
+}
+
+
+/* =========================================================
+   GRID GROUPS
+========================================================= */
+
+.grid-2col {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+.grid-3col {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+.section-block {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.cottages-group {
+    grid-column: span 3;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   FIXED ZONES
+========================================================= */
+
+.garden {
+    background: #dcfce7;
+    border-color: #15803d;
+    min-height: 100px;
+}
+
+.parking {
+    background: #f1f5f9;
+    border-color: #64748b;
+    min-height: 100px;
+}
+
+.store {
+    background: #fff7ed;
+    border-color: #f97316;
+    min-height: 70px;
+}
+
+.event-hall {
+    background: #ffffff;
+    border-color: #94a3b8;
+    min-height: 70px;
+}
+
+.camping-site {
+    background: #f0fdf4;
+    border-color: #16a34a;
+    min-height: 100px;
+}
+
+.reception-block {
+    border: 2px solid #0284c7;
+
+    background-color: #f0f9ff;
+
+    padding: 10px;
+
+    border-radius: 6px;
+}
+
+.registration {
+    background: #fef2f2;
+    border-color: #ef4444;
+}
+
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.table-area {
+    display: flex;
+
+    gap: 15px;
+
+    justify-content: center;
+
+    margin-bottom: 15px;
+}
+
+.table-card {
+    border: 2px dashed #64748b;
+
+    padding: 8px 15px;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ROOM MAP OBJECTS
+========================================================= */
+
+.map-room {
+    position: absolute;
+
+    z-index: 20;
+
+    cursor: grab;
+
+    user-select: none;
+
+    touch-action: none;
+
+    border: 2px solid #0284c7;
+
+    background: #e0f2fe;
+
+    border-radius: 7px;
+
+    padding: 8px;
+
+    min-width: 90px;
+
+    min-height: 55px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    box-shadow:
+        0 3px 8px rgba(0,0,0,0.15);
+
+    transition:
+        box-shadow 0.15s,
+        transform 0.15s;
+}
+
+.map-room:hover {
+    box-shadow:
+        0 5px 14px rgba(0,0,0,0.2);
+
+    z-index: 30;
+}
+
+.map-room.dragging {
+    cursor: grabbing;
+
+    transform: scale(1.04);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.25);
+
+    z-index: 100;
+}
+
+.map-room-name {
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.map-room-type {
+    font-size: 9px;
+
+    color: #475569;
+
+    margin-top: 2px;
+}
+
+.map-room-price {
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #ea580c;
+
+    margin-top: 3px;
+}
+
+
+/* =========================================================
+   UNPLACED ROOM
+========================================================= */
+
+.map-room.unplaced {
+    position: relative;
+
+    left: auto !important;
+
+    top: auto !important;
+
+    width: 100% !important;
+
+    height: auto !important;
+
+    min-height: 60px;
+
+    cursor: grab;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.mapping-sidebar {
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    position: sticky;
+
+    top: 20px;
+}
+
+.sidebar-header {
+    padding: 16px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-title {
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: var(--text);
+}
+
+.sidebar-subtitle {
+    margin-top: 4px;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    color: var(--muted);
+}
+
+.unplaced-list {
+    padding: 15px;
+
+    max-height: 600px;
+
+    overflow-y: auto;
+}
+
+.empty-rooms {
+    text-align: center;
+
+    padding: 25px 10px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   LEGEND
+========================================================= */
+
+.legend {
+    margin-top: 15px;
+
+    padding: 15px;
+
+    border-top: 1px solid var(--border);
+}
+
+.legend-title {
+    font-size: 11px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+.legend-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 10px;
+
+    color: #64748b;
+
+    margin-bottom: 7px;
+}
+
+.legend-box {
+    width: 18px;
+
+    height: 14px;
+
+    border-radius: 3px;
+
+    border: 1px solid;
+}
+
+.legend-room {
+    background: #e0f2fe;
+    border-color: #0284c7;
+}
+
+.legend-cottage {
+    background: #fef08a;
+    border-color: #ca8a04;
+}
+
+.legend-garden {
+    background: #dcfce7;
+    border-color: #15803d;
+}
+
+.legend-road {
+    background: #cbd5e1;
+    border-color: #94a3b8;
+}
+
+
+/* =========================================================
+   DROP HIGHLIGHT
+========================================================= */
+
+.map-container.map-drop-active {
+    outline: 3px dashed #0284c7;
+    outline-offset: -5px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .mapping-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .mapping-sidebar {
+        position: static;
+    }
+}
+
+</style>
+
+
+<div class="mapping-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="mapping-header">
+
+        <div>
+
+            <div class="mapping-title">
+                Resort Mapping
+            </div>
+
+            <div class="mapping-subtitle">
+                Drag rooms and cottages to their actual location on the resort layout.
+            </div>
+
+        </div>
+
+        <div
+            id="saveStatus"
+            class="mapping-save-status"
+        >
+            Ready
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAP + SIDEBAR
+    ====================================================== -->
+
+    <div class="mapping-layout">
+
+
+        <!-- =================================================
+             MAP
+        ================================================== -->
+
+        <div class="map-wrapper">
+
+            <div
+                class="resort-map"
+                id="resortMap"
+            >
+
+                <!-- BEACH -->
+
+                <div class="beach-bar">
+                    🌊 BEACH
+                </div>
+
+
+                <!-- MAP GRID -->
+
+                <div class="map-container" id="mapContainer">
+
+
+                    <!-- =================================================
+                         COTTAGE AREA
+                    ================================================== -->
+
+                    <div class="cottages-group">
+
+                        <div class="map-card">
+
+                            <div class="map-card-title">
+                                Cottage Area
+                            </div>
+
+                            <div class="map-card-subtitle">
+                                Drag cottages here
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         UPPER LEFT
+                    ================================================== -->
+
+                    <div class="section-block">
+
+                        <div class="map-card">
+
+                            <div class="map-card-title">
+                                Fan Room Area
+                            </div>
+
+                            <div class="map-card-subtitle">
+                                Drag fan rooms here
+                            </div>
+
+                        </div>
+
+
+                        <div class="map-card event-hall">
+
+                            <div class="map-card-title">
+                                🏛 Event Hall
+                            </div>
+
+                        </div>
+
+
+                        <div class="map-card camping-site">
+
+                            <div class="map-card-title">
+                                ⛺ Camping Site
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         VERTICAL PATHWAY
+                    ================================================== -->
+
+                    <div class="road-v">
+                        WAY
+                    </div>
+
+
+                    <!-- =================================================
+                         UPPER RIGHT
+                    ================================================== -->
+
+                    <div class="section-block">
+
+                        <div class="map-card">
+
+                            <div class="map-card-title">
+                                Two-Story Complex
+                            </div>
+
+                            <div class="map-card-subtitle">
+                                Room / Cottage area
+                            </div>
+
+                        </div>
+
+
+                        <div class="grid-2col">
+
+                            <div class="map-card">
+
+                                <div class="map-card-title">
+                                    Fan Room
+                                </div>
+
+                                <div class="map-card-subtitle">
+                                    2nd Floor
+                                </div>
+
+                            </div>
+
+
+                            <div class="map-card">
+
+                                <div class="map-card-title">
+                                    Airconditioned Room
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="map-card camping-site">
+
+                            <div class="map-card-title">
+                                ⛺ Main Camping Site
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         HORIZONTAL PATHWAY
+                    ================================================== -->
+
+                    <div class="road-h">
+                        WAY
+                    </div>
+
+
+                    <!-- =================================================
+                         LOWER LEFT
+                    ================================================== -->
+
+                    <div class="section-block">
+
+
+                        <!-- TABLES -->
+
+                        <div class="table-area">
+
+                            <div class="table-card">
+                                🪑 TABLE 2
+                            </div>
+
+                            <div class="table-card">
+                                🪑 TABLE 1
+                            </div>
+
+                        </div>
+
+
+                        <!-- BUILDING -->
+
+                        <div class="reception-block">
+
+                            <div
+                                style="
+                                    font-weight:700;
+                                    font-size:13px;
+                                    text-align:center;
+                                    margin-bottom:10px;
+                                "
+                            >
+
+                                🏢 Main Building
+
+                            </div>
+
+
+                            <div
+                                class="map-card-subtitle"
+                                style="
+                                    text-align:center;
+                                    margin-bottom:10px;
+                                "
+                            >
+
+                                Drag airconditioned rooms here
+
+                            </div>
+
+
+                            <div class="map-card registration">
+
+                                <div class="map-card-title">
+
+                                    📋 Registration / Payment / Check-in
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         LOWER PATHWAY
+                    ================================================== -->
+
+                    <div class="road-v">
+
+                        WAY
+
+                    </div>
+
+
+                    <!-- =================================================
+                         LOWER RIGHT
+                    ================================================== -->
+
+                    <div class="section-block">
+
+
+                        <!-- STORE -->
+
+                        <div class="map-card store">
+
+                            <div class="map-card-title">
+                                🛒 Store
+                            </div>
+
+                        </div>
+
+
+                        <!-- GARDEN -->
+
+                        <div class="map-card garden">
+
+                            <div class="map-card-title">
+                                🌿 Garden
+                            </div>
+
+                        </div>
+
+
+                        <!-- PARKING -->
+
+                        <div class="map-card parking">
+
+                            <div class="map-card-title">
+                                🅿️ Parking Area
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     POSITIONED ROOMS
+                ================================================== -->
+
+                {% for room in rooms %}
+
+                    {% if room.map_position and room.map_position.is_visible %}
+
+                        <div
+                            class="map-room"
+                            data-room-id="{{ room.id }}"
+                            style="
+                                left: {{ room.map_position.x }}%;
+                                top: {{ room.map_position.y }}%;
+                                width: {{ room.map_position.width }}%;
+                                height: {{ room.map_position.height }}%;
+                            "
+                        >
+
+                            <div class="map-room-name">
+                                {{ room.name }}
+                            </div>
+
+                            <div class="map-room-type">
+                                {{ room.type }}
+                            </div>
+
+                            <div class="map-room-price">
+                                ₱{{ room.price }}
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="mapping-sidebar">
+
+
+            <div class="sidebar-header">
+
+                <div class="sidebar-title">
+                    Rooms & Cottages
+                </div>
+
+                <div class="sidebar-subtitle">
+
+                    Drag an item from here onto the resort map.
+                    Once placed, its position is saved automatically.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="unplaced-list"
+                id="unplacedList"
+            >
+
+                {% for room in rooms %}
+
+                    {% if not room.map_position or not room.map_position.is_visible %}
+
+                        <div
+                            class="map-room unplaced"
+                            data-room-id="{{ room.id }}"
+                        >
+
+                            <div class="map-room-name">
+                                {{ room.name }}
+                            </div>
+
+                            <div class="map-room-type">
+                                {{ room.type }}
+                            </div>
+
+                            <div class="map-room-price">
+                                ₱{{ room.price }}
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                {% empty %}
+
+                    <div class="empty-rooms">
+                        No rooms or cottages available.
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- LEGEND -->
+
+            <div class="legend">
+
+                <div class="legend-title">
+                    Map Legend
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-box legend-room"></span>
+
+                    Room
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-box legend-cottage"></span>
+
+                    Cottage
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-box legend-garden"></span>
+
+                    Garden
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-box legend-road"></span>
+
+                    Pathway
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const map =
+            document.getElementById("resortMap");
+
+        const mapContainer =
+            document.getElementById("mapContainer");
+
+        const saveStatus =
+            document.getElementById("saveStatus");
+
+        let draggedRoom = null;
+
+        let offsetX = 0;
+
+        let offsetY = 0;
+
+        let originalParent = null;
+
+        let isFromSidebar = false;
+
+
+        /* =====================================================
+           START DRAG
+        ====================================================== */
+
+        function startDrag(
+            element,
+            clientX,
+            clientY
+        ) {
+
+            draggedRoom = element;
+
+            originalParent =
+                element.parentElement;
+
+            isFromSidebar =
+                element.classList.contains("unplaced");
+
+            const rect =
+                element.getBoundingClientRect();
+
+            offsetX =
+                clientX - rect.left;
+
+            offsetY =
+                clientY - rect.top;
+
+            element.classList.add("dragging");
+
+        }
+
+
+        /* =====================================================
+           MOVE DRAG
+        ====================================================== */
+
+        function moveDrag(
+            clientX,
+            clientY
+        ) {
+
+            if (!draggedRoom) {
+                return;
+            }
+
+            const mapRect =
+                map.getBoundingClientRect();
+
+            /*
+             * If dragging from sidebar, don't physically
+             * move the sidebar item.
+             *
+             * Instead, calculate the mouse position
+             * relative to the map.
+             */
+
+            let x =
+                clientX -
+                mapRect.left -
+                offsetX;
+
+            let y =
+                clientY -
+                mapRect.top -
+                offsetY;
+
+
+            const roomWidth =
+                draggedRoom.offsetWidth;
+
+            const roomHeight =
+                draggedRoom.offsetHeight;
+
+
+            /*
+             * Keep inside map
+             */
+
+            x = Math.max(
+                0,
+                Math.min(
+                    x,
+                    mapRect.width -
+                    roomWidth
+                )
+            );
+
+
+            y = Math.max(
+                0,
+                Math.min(
+                    y,
+                    mapRect.height -
+                    roomHeight
+                )
+            );
+
+
+            /*
+             * Highlight map while dragging
+             */
+
+            if (
+                clientX >= mapRect.left &&
+                clientX <= mapRect.right &&
+                clientY >= mapRect.top &&
+                clientY <= mapRect.bottom
+            ) {
+
+                mapContainer.classList.add(
+                    "map-drop-active"
+                );
+
+            }
+            else {
+
+                mapContainer.classList.remove(
+                    "map-drop-active"
+                );
+
+            }
+
+
+            /*
+             * Existing map room:
+             * move it visually.
+             */
+
+            if (!isFromSidebar) {
+
+                const xPercent =
+                    (x / mapRect.width) * 100;
+
+                const yPercent =
+                    (y / mapRect.height) * 100;
+
+
+                draggedRoom.style.left =
+                    xPercent + "%";
+
+                draggedRoom.style.top =
+                    yPercent + "%";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           END DRAG
+        ====================================================== */
+
+        async function endDrag() {
+
+            if (!draggedRoom) {
+                return;
+            }
+
+
+            mapContainer.classList.remove(
+                "map-drop-active"
+            );
+
+
+            const room =
+                draggedRoom;
+
+
+            const roomId =
+                room.dataset.roomId;
+
+
+            room.classList.remove(
+                "dragging"
+            );
+
+
+            const mapRect =
+                map.getBoundingClientRect();
+
+
+            /*
+             * ===============================================
+             * DRAGGING FROM SIDEBAR
+             * ===============================================
+             */
+
+            if (isFromSidebar) {
+
+                /*
+                 * Get current mouse position from the last
+                 * known pointer location.
+                 *
+                 * Since the sidebar element itself was not
+                 * moved, use its center as a fallback.
+                 */
+
+                const roomRect =
+                    room.getBoundingClientRect();
+
+
+                /*
+                 * Create map copy
+                 */
+
+                const clone =
+                    room.cloneNode(true);
+
+
+                clone.classList.remove(
+                    "unplaced"
+                );
+
+
+                clone.classList.add(
+                    "map-room"
+                );
+
+
+                clone.style.position =
+                    "absolute";
+
+
+                /*
+                 * Default placement:
+                 * center of visible map.
+                 */
+
+                let x =
+                    (
+                        roomRect.left -
+                        mapRect.left
+                    );
+
+
+                let y =
+                    (
+                        roomRect.top -
+                        mapRect.top
+                    );
+
+
+                /*
+                 * If pointer position is available,
+                 * use the pointer.
+                 */
+
+                if (
+                    window.lastPointerX !== undefined &&
+                    window.lastPointerY !== undefined
+                ) {
+
+                    x =
+                        window.lastPointerX -
+                        mapRect.left -
+                        offsetX;
+
+                    y =
+                        window.lastPointerY -
+                        mapRect.top -
+                        offsetY;
+
+                }
+
+
+                /*
+                 * Keep inside map
+                 */
+
+                const cloneWidth =
+                    room.offsetWidth;
+
+                const cloneHeight =
+                    room.offsetHeight;
+
+
+                x = Math.max(
+                    0,
+                    Math.min(
+                        x,
+                        mapRect.width -
+                        cloneWidth
+                    )
+                );
+
+
+                y = Math.max(
+                    0,
+                    Math.min(
+                        y,
+                        mapRect.height -
+                        cloneHeight
+                    )
+                );
+
+
+                const xPercent =
+                    (x / mapRect.width) * 100;
+
+                const yPercent =
+                    (y / mapRect.height) * 100;
+
+
+                const widthPercent =
+                    (cloneWidth /
+                    mapRect.width) * 100;
+
+
+                const heightPercent =
+                    (cloneHeight /
+                    mapRect.height) * 100;
+
+
+                clone.style.left =
+                    xPercent + "%";
+
+                clone.style.top =
+                    yPercent + "%";
+
+                clone.style.width =
+                    widthPercent + "%";
+
+                clone.style.height =
+                    heightPercent + "%";
+
+
+                map.appendChild(clone);
+
+
+                /*
+                 * Remove sidebar item
+                 */
+
+                room.remove();
+
+
+                /*
+                 * Attach drag events to new map item
+                 */
+
+                attachDragEvents(clone);
+
+
+                /*
+                 * Save position
+                 */
+
+                await saveRoomPosition(
+                    roomId,
+                    xPercent,
+                    yPercent,
+                    widthPercent,
+                    heightPercent
+                );
+
+
+            }
+
+            /*
+             * ===============================================
+             * EXISTING MAP ROOM
+             * ===============================================
+             */
+
+            else {
+
+                const x =
+                    parseFloat(
+                        room.style.left
+                    ) || 0;
+
+
+                const y =
+                    parseFloat(
+                        room.style.top
+                    ) || 0;
+
+
+                const width =
+                    (
+                        room.offsetWidth /
+                        map.offsetWidth
+                    ) * 100;
+
+
+                const height =
+                    (
+                        room.offsetHeight /
+                        map.offsetHeight
+                    ) * 100;
+
+
+                await saveRoomPosition(
+                    roomId,
+                    x,
+                    y,
+                    width,
+                    height
+                );
+
+            }
+
+
+            draggedRoom = null;
+
+            originalParent = null;
+
+            isFromSidebar = false;
+
+        }
+
+
+        /* =====================================================
+           SAVE ROOM POSITION
+        ====================================================== */
+
+        async function saveRoomPosition(
+            roomId,
+            x,
+            y,
+            width,
+            height
+        ) {
+
+            saveStatus.textContent =
+                "Saving...";
+
+
+            saveStatus.classList.remove(
+                "saved"
+            );
+
+
+            /*
+             * IMPORTANT:
+             *
+             * Your URL requires:
+             *
+             * mapping/room/<room_id>/position/
+             *
+             * Therefore we MUST pass roomId.
+             */
+
+            const saveUrl =
+                "{% url 'save_room_map_position' room_id=0 %}"
+                    .replace(
+                        "/0/",
+                        "/" + roomId + "/"
+                    );
+
+
+            const csrfToken =
+                getCookie("csrftoken");
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        saveUrl,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "X-CSRFToken":
+                                    csrfToken,
+
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    x: x,
+
+                                    y: y,
+
+                                    width: width,
+
+                                    height: height,
+
+                                    is_visible: true
+
+                                })
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    response.ok &&
+                    result.success
+                ) {
+
+                    saveStatus.textContent =
+                        "Position saved ✓";
+
+
+                    saveStatus.classList.add(
+                        "saved"
+                    );
+
+                }
+                else {
+
+                    console.error(
+                        "Save error:",
+                        result
+                    );
+
+
+                    saveStatus.textContent =
+                        result.message ||
+                        "Unable to save position.";
+
+                }
+
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Save request error:",
+                    error
+                );
+
+
+                saveStatus.textContent =
+                    "Error saving position.";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           MOUSE EVENTS
+        ====================================================== */
+
+        function attachDragEvents(
+            element
+        ) {
+
+            element.addEventListener(
+                "mousedown",
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    window.lastPointerX =
+                        event.clientX;
+
+                    window.lastPointerY =
+                        event.clientY;
+
+
+                    startDrag(
+                        element,
+                        event.clientX,
+                        event.clientY
+                    );
+
+                }
+            );
+
+
+            element.addEventListener(
+                "touchstart",
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    const touch =
+                        event.touches[0];
+
+
+                    window.lastPointerX =
+                        touch.clientX;
+
+                    window.lastPointerY =
+                        touch.clientY;
+
+
+                    startDrag(
+                        element,
+                        touch.clientX,
+                        touch.clientY
+                    );
+
+                },
+                {
+                    passive: false
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           MOUSE MOVE
+        ====================================================== */
+
+        document.addEventListener(
+            "mousemove",
+            function (event) {
+
+                if (!draggedRoom) {
+                    return;
+                }
+
+
+                window.lastPointerX =
+                    event.clientX;
+
+                window.lastPointerY =
+                    event.clientY;
+
+
+                moveDrag(
+                    event.clientX,
+                    event.clientY
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           MOUSE UP
+        ====================================================== */
+
+        document.addEventListener(
+            "mouseup",
+            function () {
+
+                if (!draggedRoom) {
+                    return;
+                }
+
+
+                endDrag();
+
+            }
+        );
+
+
+        /* =====================================================
+           TOUCH MOVE
+        ====================================================== */
+
+        document.addEventListener(
+            "touchmove",
+            function (event) {
+
+                if (!draggedRoom) {
+                    return;
+                }
+
+
+                event.preventDefault();
+
+
+                const touch =
+                    event.touches[0];
+
+
+                window.lastPointerX =
+                    touch.clientX;
+
+                window.lastPointerY =
+                    touch.clientY;
+
+
+                moveDrag(
+                    touch.clientX,
+                    touch.clientY
+                );
+
+            },
+            {
+                passive: false
+            }
+        );
+
+
+        /* =====================================================
+           TOUCH END
+        ====================================================== */
+
+        document.addEventListener(
+            "touchend",
+            function () {
+
+                if (!draggedRoom) {
+                    return;
+                }
+
+
+                endDrag();
+
+            }
+        );
+
+
+        /* =====================================================
+           ATTACH EXISTING ROOMS
+        ====================================================== */
+
+        document
+            .querySelectorAll(
+                ".map-room"
+            )
+            .forEach(
+                function (element) {
+
+                    attachDragEvents(
+                        element
+                    );
+
+                }
+            );
+
+
+        /* =====================================================
+           CSRF COOKIE
+        ====================================================== */
+
+        function getCookie(name) {
+
+            let cookieValue = null;
+
+
+            if (
+                document.cookie &&
+                document.cookie !== ""
+            ) {
+
+                const cookies =
+                    document.cookie.split(";");
+
+
+                for (
+                    let i = 0;
+                    i < cookies.length;
+                    i++
+                ) {
+
+                    const cookie =
+                        cookies[i].trim();
+
+
+                    if (
+                        cookie.substring(
+                            0,
+                            name.length + 1
+                        ) ===
+                        name + "="
+                    ) {
+
+                        cookieValue =
+                            decodeURIComponent(
+                                cookie.substring(
+                                    name.length + 1
+                                )
+                            );
+
+                        break;
+
+                    }
+
+                }
+
+            }
+
+
+            return cookieValue;
+
+        }
+
+    }
+
+);
+
+</script>
+
+{% endblock %}

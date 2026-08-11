@@ -1,0 +1,1024 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   REPORTS PAGE
+========================================================= */
+
+.reports-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.reports-header {
+    margin-bottom: 25px;
+}
+
+.reports-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.reports-subtitle {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.report-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.report-stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.report-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.report-stat-value {
+    margin-top: 8px;
+    font-size: 25px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.report-stat-description {
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.report-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.report-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.report-card:last-child {
+    margin-bottom: 0;
+}
+
+.report-card-header {
+    padding: 17px 20px;
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.report-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.report-card-subtitle {
+    margin-top: 3px;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.report-card-body {
+    padding: 20px;
+}
+
+
+/* =========================================================
+   PAYMENT SUMMARY
+========================================================= */
+
+.payment-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.payment-box {
+    padding: 15px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+}
+
+.payment-box-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.payment-box-value {
+    margin-top: 6px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.payment-paid {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.payment-paid .payment-box-value {
+    color: #15803d;
+}
+
+.payment-pending {
+    background: #fff7ed;
+    border-color: #fed7aa;
+}
+
+.payment-pending .payment-box-value {
+    color: #c2410c;
+}
+
+.payment-unpaid {
+    background: #f8fafc;
+}
+
+.payment-rejected {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.payment-rejected .payment-box-value {
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   RESERVATION TABLE
+========================================================= */
+
+.report-table-wrapper {
+    overflow-x: auto;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.report-table th {
+    padding: 11px 14px;
+    text-align: left;
+    background: #f8fafc;
+
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.report-table td {
+    padding: 13px 14px;
+    border-top: 1px solid #f1f5f9;
+
+    font-size: 11px;
+    color: var(--text);
+}
+
+.customer-name {
+    font-weight: 700;
+}
+
+.customer-email {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.report-badge {
+    display: inline-flex;
+    padding: 5px 8px;
+    border-radius: 15px;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.badge-paid {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.badge-pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.badge-unpaid {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.badge-rejected {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.badge-confirmed {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.badge-cancelled {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.badge-completed {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+
+/* =========================================================
+   REVENUE
+========================================================= */
+
+.revenue-row {
+    padding: 13px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.revenue-row:first-child {
+    padding-top: 0;
+}
+
+.revenue-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.revenue-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.revenue-room {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.revenue-amount {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.revenue-meta {
+    margin-top: 4px;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   TOTAL REVENUE
+========================================================= */
+
+.total-revenue-box {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 20px;
+}
+
+.total-revenue-label {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.total-revenue-value {
+    margin-top: 5px;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .report-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .report-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .reports-title {
+        font-size: 19px;
+    }
+
+}
+
+</style>
+
+<div class="reports-page">
+
+<!-- =====================================================
+     HEADER
+====================================================== -->
+
+<div class="reports-header">
+
+    <div class="reports-title">
+        Reports
+    </div>
+
+    <div class="reports-subtitle">
+        Overview of reservations, payments, customers, and revenue
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RESERVATION STATISTICS
+====================================================== -->
+
+<div class="report-stat-grid">
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            TOTAL RESERVATIONS
+        </div>
+
+        <div class="report-stat-value">
+            {{ total_reservations }}
+        </div>
+
+        <div class="report-stat-description">
+            All reservations
+        </div>
+
+    </div>
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            PENDING
+        </div>
+
+        <div class="report-stat-value">
+            {{ pending_reservations }}
+        </div>
+
+        <div class="report-stat-description">
+            Awaiting confirmation
+        </div>
+
+    </div>
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            CONFIRMED
+        </div>
+
+        <div class="report-stat-value">
+            {{ confirmed_reservations }}
+        </div>
+
+        <div class="report-stat-description">
+            Active reservations
+        </div>
+
+    </div>
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            CUSTOMERS
+        </div>
+
+        <div class="report-stat-value">
+            {{ total_customers }}
+        </div>
+
+        <div class="report-stat-description">
+            Customers with reservations
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SECONDARY STATISTICS
+====================================================== -->
+
+<div class="report-stat-grid">
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            COMPLETED
+        </div>
+
+        <div class="report-stat-value">
+            {{ completed_reservations }}
+        </div>
+
+        <div class="report-stat-description">
+            Completed reservations
+        </div>
+
+    </div>
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            CANCELLED
+        </div>
+
+        <div class="report-stat-value">
+            {{ cancelled_reservations }}
+        </div>
+
+        <div class="report-stat-description">
+            Cancelled reservations
+        </div>
+
+    </div>
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            PAID PAYMENTS
+        </div>
+
+        <div class="report-stat-value">
+            {{ paid_payments }}
+        </div>
+
+        <div class="report-stat-description">
+            Verified payments
+        </div>
+
+    </div>
+
+
+    <div class="report-stat-card">
+
+        <div class="report-stat-label">
+            PAYMENT VERIFICATION
+        </div>
+
+        <div class="report-stat-value">
+            {{ pending_payments }}
+        </div>
+
+        <div class="report-stat-description">
+            Receipts awaiting review
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN GRID
+====================================================== -->
+
+<div class="report-grid">
+
+
+    <!-- =================================================
+         LEFT COLUMN
+    ================================================== -->
+
+    <div>
+
+
+        <!-- RECENT RESERVATIONS -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div>
+
+                    <div class="report-card-title">
+                        Recent Reservations
+                    </div>
+
+                    <div class="report-card-subtitle">
+                        Latest customer bookings
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="report-table-wrapper">
+
+                <table class="report-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Room
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Payment
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for reservation in recent_reservations %}
+
+                        <tr>
+
+                            <td>
+
+                                <div class="customer-name">
+                                    {{ reservation.customer.username }}
+                                </div>
+
+                                <div class="customer-email">
+                                    {{ reservation.customer.email }}
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                {{ reservation.room.name }}
+                            </td>
+
+
+                            <td>
+
+                                ₱{{ reservation.total_amount }}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if reservation.payment_status == "PAID" %}
+
+                                    <span class="report-badge badge-paid">
+                                        PAID
+                                    </span>
+
+                                {% elif reservation.payment_status == "PENDING" %}
+
+                                    <span class="report-badge badge-pending">
+                                        PENDING
+                                    </span>
+
+                                {% elif reservation.payment_status == "REJECTED" %}
+
+                                    <span class="report-badge badge-rejected">
+                                        REJECTED
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="report-badge badge-unpaid">
+                                        UNPAID
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if reservation.status == "CONFIRMED" %}
+
+                                    <span class="report-badge badge-confirmed">
+                                        CONFIRMED
+                                    </span>
+
+                                {% elif reservation.status == "CANCELLED" %}
+
+                                    <span class="report-badge badge-cancelled">
+                                        CANCELLED
+                                    </span>
+
+                                {% elif reservation.status == "COMPLETED" %}
+
+                                    <span class="report-badge badge-completed">
+                                        COMPLETED
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="report-badge badge-pending">
+                                        PENDING
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                style="
+                                    text-align:center;
+                                    padding:30px;
+                                    color:var(--muted);
+                                "
+                            >
+                                No reservations found.
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- REVENUE BY ROOM -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div>
+
+                    <div class="report-card-title">
+                        Revenue by Room / Cottage
+                    </div>
+
+                    <div class="report-card-subtitle">
+                        Revenue from verified payments
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="report-card-body">
+
+                {% for room in revenue_by_room %}
+
+                    <div class="revenue-row">
+
+                        <div class="revenue-top">
+
+                            <div class="revenue-room">
+                                {{ room.room__name }}
+                            </div>
+
+                            <div class="revenue-amount">
+                                ₱{{ room.total_revenue }}
+                            </div>
+
+                        </div>
+
+                        <div class="revenue-meta">
+
+                            {{ room.reservation_count }}
+                            reservation{{ room.reservation_count|pluralize }}
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <div
+                        style="
+                            text-align:center;
+                            padding:20px;
+                            color:var(--muted);
+                            font-size:12px;
+                        "
+                    >
+                        No paid reservations yet.
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         RIGHT COLUMN
+    ================================================== -->
+
+    <div>
+
+
+        <!-- TOTAL REVENUE -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div class="report-card-title">
+                    Revenue
+                </div>
+
+            </div>
+
+
+            <div class="report-card-body">
+
+                <div class="total-revenue-box">
+
+                    <div class="total-revenue-label">
+                        VERIFIED REVENUE
+                    </div>
+
+                    <div class="total-revenue-value">
+
+                        ₱{{ total_revenue }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT SUMMARY -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div class="report-card-title">
+                    Payment Summary
+                </div>
+
+            </div>
+
+
+            <div class="report-card-body">
+
+                <div class="payment-summary">
+
+
+                    <div class="payment-box payment-paid">
+
+                        <div class="payment-box-label">
+                            PAID
+                        </div>
+
+                        <div class="payment-box-value">
+                            {{ paid_payments }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-box payment-pending">
+
+                        <div class="payment-box-label">
+                            PENDING
+                        </div>
+
+                        <div class="payment-box-value">
+                            {{ pending_payments }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-box payment-unpaid">
+
+                        <div class="payment-box-label">
+                            UNPAID
+                        </div>
+
+                        <div class="payment-box-value">
+                            {{ unpaid_payments }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="payment-box payment-rejected">
+
+                        <div class="payment-box-label">
+                            REJECTED
+                        </div>
+
+                        <div class="payment-box-value">
+                            {{ rejected_payments }}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESERVATION BREAKDOWN -->
+
+        <div class="report-card">
+
+            <div class="report-card-header">
+
+                <div class="report-card-title">
+                    Reservation Breakdown
+                </div>
+
+            </div>
+
+
+            <div class="report-card-body">
+
+
+                <div class="meta-list">
+
+
+                    <div class="meta-row">
+
+                        <span class="meta-label">
+                            Pending
+                        </span>
+
+                        <span class="meta-value">
+                            {{ pending_reservations }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="meta-row">
+
+                        <span class="meta-label">
+                            Confirmed
+                        </span>
+
+                        <span class="meta-value">
+                            {{ confirmed_reservations }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="meta-row">
+
+                        <span class="meta-label">
+                            Completed
+                        </span>
+
+                        <span class="meta-value">
+                            {{ completed_reservations }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="meta-row">
+
+                        <span class="meta-label">
+                            Cancelled
+                        </span>
+
+                        <span class="meta-value">
+                            {{ cancelled_reservations }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</div>
+
+{% endblock %}

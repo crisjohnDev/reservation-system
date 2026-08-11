@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Room, Reservation
+from .models import Room, Reservation, RoomMapPosition
 
 
 @admin.register(Room)
@@ -57,4 +57,24 @@ class ReservationAdmin(admin.ModelAdmin):
 
     ordering = (
         "-created_at",
+    )
+
+@admin.register(RoomMapPosition)
+class RoomMapPositionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "room",
+        "x",
+        "y",
+        "width",
+        "height",
+        "updated_at",
+    )
+
+    list_filter = (
+        "room__type",
+    )
+
+    search_fields = (
+        "room__name",
     )
